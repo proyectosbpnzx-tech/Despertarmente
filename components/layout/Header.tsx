@@ -19,7 +19,7 @@ export function Header() {
           href={DASHBOARD_URL}
           className="rounded-md text-sm text-muted transition-colors hover:text-accent-soft"
         >
-          Socios
+          Login
         </a>
       </Container>
     </header>

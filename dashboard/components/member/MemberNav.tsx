@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
+import { LANDING_URL } from "@/lib/site";
 
 const LINKS = [
   { href: "/mi-progreso", label: "Inicio" },
@@ -11,7 +12,7 @@ const LINKS = [
 export function MemberNav() {
   return (
     <nav className="border-b border-border bg-surface">
-      <Container>
+      <Container className="flex items-center justify-between">
         <ul className="flex gap-6 overflow-x-auto py-3 text-sm">
           {LINKS.map((link) => (
             <li key={link.href}>
@@ -21,6 +22,9 @@ export function MemberNav() {
             </li>
           ))}
         </ul>
+        <a href={LANDING_URL} className="shrink-0 text-sm text-muted hover:text-accent-soft">
+          Volver al sitio
+        </a>
       </Container>
     </nav>
   );

@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { Container } from "@/components/ui/Container";
+import { LANDING_URL } from "@/lib/site";
 import { login, type LoginState } from "./actions";
 
 const initialState: LoginState = {};
@@ -12,7 +13,10 @@ export default function LoginPage() {
   return (
     <main className="flex min-h-screen items-center">
       <Container className="max-w-sm">
-        <h1 className="font-display text-2xl font-bold text-text">Ingresá a tu cuenta</h1>
+        <a href={LANDING_URL} className="text-sm text-muted transition-colors hover:text-accent-soft">
+          ← Volver al sitio
+        </a>
+        <h1 className="mt-4 font-display text-2xl font-bold text-text">Ingresá a tu cuenta</h1>
         <p className="mt-1 text-sm text-muted">Panel de socios — Despertarmente.</p>
 
         <form action={formAction} className="mt-8 flex flex-col gap-4" noValidate>

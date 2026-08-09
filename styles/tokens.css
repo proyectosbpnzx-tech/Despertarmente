@@ -1,0 +1,64 @@
+/* =============================================================================
+   Despertarmente — ÚNICO archivo de identidad visual.
+   Cambiar colores / tipografías / radios / espaciados = editar SOLO este archivo.
+   Ver skill: .claude/skills/brand-tokens/SKILL.md
+   ============================================================================= */
+
+/* ------------------------------------------------------------------ */
+/* 1) PRIMITIVOS — material crudo. NO usar directamente en componentes. */
+/* ------------------------------------------------------------------ */
+:root {
+  /* Negros / grises (base oscura, tomada del logo) */
+  --ink-950: #07090d; /* fondo base */
+  --ink-900: #0d1016; /* superficie */
+  --ink-850: #12161d; /* superficie elevada */
+  --ink-700: #29313d; /* bordes */
+
+  /* Azul eléctrico + cian (acento de marca, del logo) */
+  --blue-600: #1e5fe0; /* énfasis / hover */
+  --blue-500: #2e7bff; /* acento base (iconos, bordes, texto grande) */
+  --blue-400: #5a97ff; /* acento para texto chico (mejor contraste) */
+  --cyan-400: #38d2ea; /* highlight / foco */
+
+  /* Verde WhatsApp (CTA de conversión) */
+  --green-cta: #25d366;
+  --green-cta-ink: #04160b;
+
+  /* Claros (texto sobre oscuro) */
+  --paper-50: #f4f7ff;
+  --paper-300: #aeb9ca;
+}
+
+/* ------------------------------------------------------------------ */
+/* 2) SEMÁNTICOS + 3) PUENTE TAILWIND v4                               */
+/*    @theme inline: cada token describe un ROL y genera utilidades    */
+/*    (--color-bg → bg-bg, --color-accent → text-accent/bg-accent…).   */
+/* ------------------------------------------------------------------ */
+@theme inline {
+  /* Colores semánticos */
+  --color-bg: var(--ink-950);
+  --color-surface: var(--ink-900);
+  --color-surface-2: var(--ink-850);
+  --color-text: var(--paper-50);
+  --color-muted: var(--paper-300);
+  --color-accent: var(--blue-500);
+  --color-accent-soft: var(--blue-400); /* usar para texto chico de acento (AA) */
+  --color-accent-strong: var(--blue-600);
+  --color-highlight: var(--cyan-400);
+  --color-cta: var(--green-cta);
+  --color-on-cta: var(--green-cta-ink);
+  --color-border: var(--ink-700);
+  --color-focus: var(--cyan-400);
+
+  /* Tipografías (variables provistas por next/font en el layout, con fallback) */
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+
+  /* Radios */
+  --radius-card: 1rem;
+  --radius-pill: 9999px;
+
+  /* Sombras / glow de acento */
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-glow: 0 0 0 1px rgba(46, 123, 255, 0.25), 0 8px 40px rgba(46, 123, 255, 0.2);
+}

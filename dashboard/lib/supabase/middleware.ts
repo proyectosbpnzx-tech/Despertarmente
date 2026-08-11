@@ -39,11 +39,7 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (user && isPublic) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/";
-    return NextResponse.redirect(url);
-  }
-
+  // Con sesión abierta, /login no redirige: muestra quién ingresó y permite
+  // cerrar sesión para entrar con otra cuenta.
   return response;
 }

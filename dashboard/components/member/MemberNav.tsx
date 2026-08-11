@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
+import { LogoutButton } from "@/components/ui/LogoutButton";
 import { LANDING_URL } from "@/lib/site";
 
 const LINKS = [
@@ -22,9 +23,12 @@ export function MemberNav() {
             </li>
           ))}
         </ul>
-        <a href={LANDING_URL} className="shrink-0 text-sm text-muted hover:text-accent-soft">
-          Volver al sitio
-        </a>
+        <div className="flex shrink-0 items-center gap-4">
+          <a href={LANDING_URL} className="text-sm text-muted hover:text-accent-soft">
+            Volver al sitio
+          </a>
+          <LogoutButton />
+        </div>
       </Container>
     </nav>
   );

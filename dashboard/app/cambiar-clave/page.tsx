@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { Container } from "@/components/ui/Container";
+import { LogoutButton } from "@/components/ui/LogoutButton";
 import { changePassword, type ChangePasswordState } from "./actions";
 
 const initialState: ChangePasswordState = {};
@@ -56,6 +57,8 @@ export default function CambiarClavePage() {
             {pending ? "Guardando…" : "Guardar y continuar"}
           </button>
         </form>
+
+        <LogoutButton className="mt-6" />
       </Container>
     </main>
   );

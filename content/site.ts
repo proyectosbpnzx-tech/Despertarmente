@@ -8,8 +8,18 @@ export const site: SiteInfo = {
   name: "Despertarmente",
   tagline: "Neurociencia aplicada al deporte",
 
-  // TODO: reemplazar por el dominio real de producción antes de publicar.
-  url: "https://despertarmente.com.ar",
+  /**
+   * Dirección canónica del sitio: alimenta canonical, og:url, sitemap y JSON-LD.
+   *
+   * Tiene que ser una URL que RESUELVA. Antes decía despertarmente.com.ar, un
+   * dominio que todavía no existe: eso le declaraba a los buscadores que la
+   * dirección real del sitio estaba en un lugar muerto, y los previews de link
+   * apuntaban ahí.
+   *
+   * TODO: volver a despertarmente.com.ar cuando el dominio esté registrado y
+   * apuntando a Vercel — el resto del SEO ya está preparado para ese cambio.
+   */
+  url: "https://despertarmente.vercel.app",
 
   // Formato internacional sin '+' ni espacios. Ej AR: 5491122334455
   whatsappNumber: "541155270609",

@@ -27,6 +27,13 @@
   /* Claros (texto sobre oscuro) */
   --paper-50: #f4f7ff;
   --paper-300: #aeb9ca;
+
+  /* Estado — los usa el panel (validación de formularios, badges, tablas).
+     La landing no los necesita, pero viven acá porque son parte de la marca. */
+  --red-500: #e5484d;
+  --red-ink: #2a0a0b;
+  --amber-400: #f5a524;
+  --amber-ink: #241703;
 }
 
 /* ------------------------------------------------------------------ */
@@ -49,6 +56,14 @@
   --color-on-cta: var(--green-cta-ink);
   --color-border: var(--ink-700);
   --color-focus: var(--cyan-400);
+
+  /* Estado — badges, alertas de formulario, filas de tabla (panel) */
+  --color-danger: var(--red-500);
+  --color-on-danger: var(--red-ink);
+  --color-warning: var(--amber-400);
+  --color-on-warning: var(--amber-ink);
+  --color-success: var(--green-cta);
+  --color-on-success: var(--green-cta-ink);
 
   /* Tipografías (variables provistas por next/font en el layout, con fallback) */
   --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, "Segoe UI", sans-serif;

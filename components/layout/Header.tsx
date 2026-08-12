@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/brand/Logo";
-import { DASHBOARD_URL } from "@/lib/dashboard";
 
 /** Header sticky con logo (link a inicio). La conversión a WhatsApp queda a cargo del ícono flotante. */
 export function Header() {
@@ -15,12 +14,12 @@ export function Header() {
         >
           <Logo size="sm" />
         </Link>
-        <a
-          href={DASHBOARD_URL}
+        <Link
+          href="/login"
           className="rounded-md text-sm text-muted transition-colors hover:text-accent-soft"
         >
           Login
-        </a>
+        </Link>
       </Container>
     </header>
   );

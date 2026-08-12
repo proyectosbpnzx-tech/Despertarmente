@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/content/site";
 
-// Requerido para generar el archivo con output: 'export'.
+// Se genera en build: no depende de la request.
 export const dynamic = "force-static";
 
-/** Sitemap estático (compatible con output: 'export'). */
+/** Solo rutas públicas. El panel se excluye en robots.ts y con noindex. */
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {

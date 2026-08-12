@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { WhatsappFloating } from "@/components/brand/WhatsappFloating";
-import { buildMetadata, jsonLd } from "@/lib/seo";
+
+/**
+ * Layout raíz — solo el documento, las fuentes y los estilos base.
+ *
+ * A propósito NO trae header, footer ni CTA de WhatsApp: eso es chrome del
+ * sitio público y vive en app/(sitio)/layout.tsx. El panel (/login, /panel,
+ * /mi-progreso) cuelga de este mismo raíz pero sin nada de eso.
+ */
 
 const inter = Inter({
   subsets: ["latin"],
@@ -18,29 +22,14 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap",
 });
 
-export const metadata: Metadata = buildMetadata();
+export const metadata: Metadata = {
+  title: "Despertarmente",
+};
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es-AR" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <body>
-        <a href="#contenido" className="skip-link">
-          Saltar al contenido
-        </a>
-        <Header />
-        <main id="contenido">{children}</main>
-        <Footer />
-        <WhatsappFloating />
-        <script
-          type="application/ld+json"
-          // Datos estructurados: solo campos reales (ver lib/seo.ts).
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd()) }}
-        />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

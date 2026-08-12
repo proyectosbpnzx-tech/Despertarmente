@@ -4,7 +4,7 @@ import { useActionState, useRef, useEffect, useState } from "react";
 import {
   registrarMedicion,
   type RegistrarMedicionState,
-} from "@/app/(admin)/admin/socios/[id]/actions";
+} from "@/app/(staff)/panel/socios/[id]/actions";
 import type { Medida } from "@/lib/types";
 
 const initialState: RegistrarMedicionState = {};

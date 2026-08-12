@@ -2,7 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { requireStaff } from "@/lib/auth";
 import type { Ejercicio, Medida } from "@/lib/types";
+
+// Cargar el progreso de un socio es trabajo de staff: admin y profesor por
+// igual. RLS ya lo exige (policies *_write_staff); el guard de cada acción
+// lo hace explícito y devuelve al socio a su panel en vez de un error crudo.
 
 export interface RegistrarClaseTomadaState {
   error?: string;
@@ -14,6 +19,8 @@ export async function registrarClaseTomada(
   _prevState: RegistrarClaseTomadaState,
   formData: FormData
 ): Promise<RegistrarClaseTomadaState> {
+  await requireStaff();
+
   const claseId = String(formData.get("clase_id") ?? "").trim();
   const fecha = String(formData.get("fecha") ?? "").trim();
   const presente = formData.get("presente") === "on";
@@ -41,14 +48,16 @@ export async function registrarClaseTomada(
     return { error: error.message };
   }
 
-  revalidatePath(`/admin/socios/${socioId}`);
+  revalidatePath(`/panel/socios/${socioId}`);
   return { success: true };
 }
 
 export async function eliminarClaseTomada(socioId: string, id: string) {
+  await requireStaff();
+
   const supabase = await createClient();
   await supabase.from("clases_tomadas").delete().eq("id", id);
-  revalidatePath(`/admin/socios/${socioId}`);
+  revalidatePath(`/panel/socios/${socioId}`);
 }
 
 export interface AsignarRutinaState {
@@ -61,6 +70,8 @@ export async function asignarRutina(
   _prevState: AsignarRutinaState,
   formData: FormData
 ): Promise<AsignarRutinaState> {
+  await requireStaff();
+
   const nombre = String(formData.get("nombre") ?? "").trim();
   const descripcion = String(formData.get("descripcion") ?? "").trim();
   const fechaInicio = String(formData.get("fecha_inicio") ?? "").trim();
@@ -99,14 +110,16 @@ export async function asignarRutina(
     return { error: error.message };
   }
 
-  revalidatePath(`/admin/socios/${socioId}`);
+  revalidatePath(`/panel/socios/${socioId}`);
   return { success: true };
 }
 
 export async function toggleRutinaActiva(socioId: string, id: string, activa: boolean) {
+  await requireStaff();
+
   const supabase = await createClient();
   await supabase.from("rutinas").update({ activa }).eq("id", id);
-  revalidatePath(`/admin/socios/${socioId}`);
+  revalidatePath(`/panel/socios/${socioId}`);
 }
 
 export interface RegistrarMedicionState {
@@ -125,6 +138,8 @@ export async function registrarMedicion(
   _prevState: RegistrarMedicionState,
   formData: FormData
 ): Promise<RegistrarMedicionState> {
+  await requireStaff();
+
   const fecha = String(formData.get("fecha") ?? "").trim();
   const pesoRaw = String(formData.get("peso_kg") ?? "").trim();
   const grasaRaw = String(formData.get("grasa_corporal_pct") ?? "").trim();
@@ -167,12 +182,14 @@ export async function registrarMedicion(
     return { error: error.message };
   }
 
-  revalidatePath(`/admin/socios/${socioId}`);
+  revalidatePath(`/panel/socios/${socioId}`);
   return { success: true };
 }
 
 export async function eliminarMedicion(socioId: string, id: string) {
+  await requireStaff();
+
   const supabase = await createClient();
   await supabase.from("mediciones").delete().eq("id", id);
-  revalidatePath(`/admin/socios/${socioId}`);
+  revalidatePath(`/panel/socios/${socioId}`);
 }

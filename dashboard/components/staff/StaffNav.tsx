@@ -2,20 +2,30 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { LogoutButton } from "@/components/ui/LogoutButton";
 import { LANDING_URL } from "@/lib/site";
+import type { Role } from "@/lib/types";
 
-const LINKS = [
-  { href: "/admin", label: "Inicio" },
-  { href: "/admin/socios", label: "Socios" },
-  { href: "/admin/profesores", label: "Profesores" },
-  { href: "/admin/clases", label: "Clases" },
+/** `adminOnly` deja fuera lo que es administración pura, no trabajo diario. */
+const LINKS: { href: string; label: string; adminOnly?: boolean }[] = [
+  { href: "/panel", label: "Inicio" },
+  { href: "/panel/socios", label: "Socios" },
+  { href: "/panel/clases", label: "Clases" },
+  { href: "/panel/profesores", label: "Profesores", adminOnly: true },
 ];
 
-export function AdminNav() {
+const ROLE_LABEL: Record<Role, string> = {
+  admin: "Administración",
+  profesor: "Profesor",
+  socio: "Socio",
+};
+
+export function StaffNav({ role }: { role: Role }) {
+  const links = LINKS.filter((link) => !link.adminOnly || role === "admin");
+
   return (
     <nav className="border-b border-border bg-surface">
       <Container className="flex max-w-4xl items-center justify-between">
         <ul className="flex gap-6 overflow-x-auto py-3 text-sm">
-          {LINKS.map((link) => (
+          {links.map((link) => (
             <li key={link.href}>
               <Link href={link.href} className="text-muted hover:text-text">
                 {link.label}
@@ -24,6 +34,7 @@ export function AdminNav() {
           ))}
         </ul>
         <div className="flex shrink-0 items-center gap-4">
+          <span className="hidden text-xs text-muted sm:inline">{ROLE_LABEL[role]}</span>
           <a href={LANDING_URL} className="text-sm text-muted hover:text-accent-soft">
             Volver al sitio
           </a>

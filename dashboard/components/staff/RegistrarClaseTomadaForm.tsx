@@ -4,7 +4,7 @@ import { useActionState, useRef, useEffect } from "react";
 import {
   registrarClaseTomada,
   type RegistrarClaseTomadaState,
-} from "@/app/(admin)/admin/socios/[id]/actions";
+} from "@/app/(staff)/panel/socios/[id]/actions";
 import type { Clase } from "@/lib/types";
 
 const initialState: RegistrarClaseTomadaState = {};

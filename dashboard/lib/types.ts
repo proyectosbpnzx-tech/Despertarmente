@@ -1,4 +1,8 @@
-export type Role = "admin" | "socio";
+/**
+ * 'admin' y 'profesor' son staff (panel /panel); 'socio' tiene el suyo
+ * (/mi-progreso). La frontera y los guards viven en lib/auth.ts.
+ */
+export type Role = "admin" | "profesor" | "socio";
 
 export interface Profile {
   id: string;
@@ -16,6 +20,8 @@ export interface Profesor {
   telefono: string | null;
   especialidad: string | null;
   activo: boolean;
+  /** Cuenta vinculada, si el admin le dio acceso al panel. */
+  profile_id: string | null;
   created_at: string;
 }
 

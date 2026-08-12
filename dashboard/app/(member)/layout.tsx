@@ -1,31 +1,12 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import type { Profile } from "@/lib/types";
+import { requireSocio } from "@/lib/auth";
 import { MemberNav } from "@/components/member/MemberNav";
 
+/**
+ * Panel de socio — solo lectura de lo suyo. Al staff lo manda a /panel.
+ * El socio nunca escribe su propio progreso: eso lo carga el staff.
+ */
 export default async function MemberLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role, must_change_password")
-    .eq("id", user.id)
-    .single<Pick<Profile, "role" | "must_change_password">>();
-
-  if (!profile || profile.role !== "socio") {
-    redirect("/admin");
-  }
-
-  if (profile.must_change_password) {
-    redirect("/cambiar-clave");
-  }
+  await requireSocio();
 
   return (
     <>

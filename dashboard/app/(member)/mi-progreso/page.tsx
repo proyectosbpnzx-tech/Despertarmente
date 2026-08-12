@@ -1,24 +1,14 @@
 import { Container } from "@/components/ui/Container";
-import { createClient } from "@/lib/supabase/server";
-import type { Profile } from "@/lib/types";
+import { requireSocio } from "@/lib/auth";
 
 export default async function MiProgresoPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("full_name")
-    .eq("id", user!.id)
-    .single<Pick<Profile, "full_name">>();
+  const { full_name } = await requireSocio();
 
   return (
     <main className="py-12">
       <Container>
         <h1 className="font-display text-2xl font-bold text-text">
-          Hola{profile?.full_name ? `, ${profile.full_name}` : ""}
+          Hola{full_name ? `, ${full_name}` : ""}
         </h1>
         <p className="mt-1 text-sm text-muted">Este es tu panel de progreso.</p>
 

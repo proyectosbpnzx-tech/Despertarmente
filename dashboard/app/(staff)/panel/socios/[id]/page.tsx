@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
-import { RegistrarClaseTomadaForm } from "@/components/admin/RegistrarClaseTomadaForm";
-import { AsignarRutinaForm } from "@/components/admin/AsignarRutinaForm";
-import { RegistrarMedicionForm } from "@/components/admin/RegistrarMedicionForm";
+import { RegistrarClaseTomadaForm } from "@/components/staff/RegistrarClaseTomadaForm";
+import { AsignarRutinaForm } from "@/components/staff/AsignarRutinaForm";
+import { RegistrarMedicionForm } from "@/components/staff/RegistrarMedicionForm";
 import { createClient } from "@/lib/supabase/server";
+import { requireStaff } from "@/lib/auth";
 import type { Clase, ClaseTomada, Medicion, Profile, Rutina } from "@/lib/types";
 import { eliminarClaseTomada, toggleRutinaActiva, eliminarMedicion } from "./actions";
 
@@ -15,6 +16,9 @@ export default async function SocioDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  // Ficha completa del socio: la ve y la carga todo el staff.
+  await requireStaff();
+
   const { id } = await params;
   const supabase = await createClient();
 
@@ -62,7 +66,7 @@ export default async function SocioDetailPage({
   return (
     <main className="py-12">
       <Container className="max-w-4xl">
-        <Link href="/admin/socios" className="text-sm text-accent-soft hover:underline">
+        <Link href="/panel/socios" className="text-sm text-accent-soft hover:underline">
           ← Socios
         </Link>
 

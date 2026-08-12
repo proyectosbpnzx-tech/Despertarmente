@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
-import { NuevoSocioForm } from "@/components/admin/NuevoSocioForm";
+import { NuevoSocioForm } from "@/components/staff/NuevoSocioForm";
 import { createClient } from "@/lib/supabase/server";
+import { requireStaff } from "@/lib/auth";
 import type { Profile } from "@/lib/types";
 
 export default async function SociosPage() {
+  // La lista es de todo el staff; dar de alta cuentas, solo del admin.
+  const { role } = await requireStaff();
   const supabase = await createClient();
   const { data: socios } = await supabase
     .from("profiles")
@@ -18,9 +21,11 @@ export default async function SociosPage() {
       <Container className="max-w-4xl">
         <h1 className="font-display text-2xl font-bold text-text">Socios</h1>
 
-        <div className="mt-8">
-          <NuevoSocioForm />
-        </div>
+        {role === "admin" && (
+          <div className="mt-8">
+            <NuevoSocioForm />
+          </div>
+        )}
 
         <div className="mt-8 overflow-x-auto rounded-card border border-border">
           <table className="w-full text-left text-sm">
@@ -42,7 +47,7 @@ export default async function SociosPage() {
                 socios.map((socio) => (
                   <tr key={socio.id} className="border-t border-border">
                     <td className="px-4 py-3">
-                      <Link href={`/admin/socios/${socio.id}`} className="text-text hover:underline">
+                      <Link href={`/panel/socios/${socio.id}`} className="text-text hover:underline">
                         {socio.full_name}
                       </Link>
                     </td>

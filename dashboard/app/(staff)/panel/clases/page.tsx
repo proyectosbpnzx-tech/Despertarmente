@@ -1,6 +1,7 @@
 import { Container } from "@/components/ui/Container";
-import { NuevaClaseForm } from "@/components/admin/NuevaClaseForm";
+import { NuevaClaseForm } from "@/components/staff/NuevaClaseForm";
 import { createClient } from "@/lib/supabase/server";
+import { requireStaff } from "@/lib/auth";
 import type { Clase, Profesor } from "@/lib/types";
 import { toggleClaseActiva } from "./actions";
 
@@ -17,6 +18,10 @@ const DIA_LABELS: Record<string, string> = {
 type ClaseConProfesor = Clase & { profesores: { nombre_completo: string } | null };
 
 export default async function ClasesPage() {
+  // La grilla la consulta todo el staff (el profesor necesita verla); crear y
+  // desactivar clases es del admin.
+  const { role } = await requireStaff();
+  const esAdmin = role === "admin";
   const supabase = await createClient();
 
   const [{ data: clases }, { data: profesoresActivos }] = await Promise.all([
@@ -38,9 +43,11 @@ export default async function ClasesPage() {
       <Container className="max-w-4xl">
         <h1 className="font-display text-2xl font-bold text-text">Clases</h1>
 
-        <div className="mt-8">
-          <NuevaClaseForm profesores={profesoresActivos ?? []} />
-        </div>
+        {esAdmin && (
+          <div className="mt-8">
+            <NuevaClaseForm profesores={profesoresActivos ?? []} />
+          </div>
+        )}
 
         <div className="mt-8 overflow-x-auto rounded-card border border-border">
           <table className="w-full text-left text-sm">
@@ -51,13 +58,13 @@ export default async function ClasesPage() {
                 <th className="px-4 py-3 font-medium">Día / horario</th>
                 <th className="px-4 py-3 font-medium">Cupo</th>
                 <th className="px-4 py-3 font-medium">Estado</th>
-                <th className="px-4 py-3 font-medium"></th>
+                {esAdmin && <th className="px-4 py-3 font-medium"></th>}
               </tr>
             </thead>
             <tbody>
               {!clases || clases.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-6 text-center text-muted">
+                  <td colSpan={esAdmin ? 6 : 5} className="px-4 py-6 text-center text-muted">
                     Todavía no hay clases cargadas.
                   </td>
                 </tr>
@@ -80,16 +87,18 @@ export default async function ClasesPage() {
                         <span className="text-muted">Inactiva</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-right">
-                      <form action={toggleClaseActiva.bind(null, clase.id, !clase.activa)}>
-                        <button
-                          type="submit"
-                          className="text-sm text-accent-soft underline-offset-2 hover:underline"
-                        >
-                          {clase.activa ? "Desactivar" : "Reactivar"}
-                        </button>
-                      </form>
-                    </td>
+                    {esAdmin && (
+                      <td className="px-4 py-3 text-right">
+                        <form action={toggleClaseActiva.bind(null, clase.id, !clase.activa)}>
+                          <button
+                            type="submit"
+                            className="text-sm text-accent-soft underline-offset-2 hover:underline"
+                          >
+                            {clase.activa ? "Desactivar" : "Reactivar"}
+                          </button>
+                        </form>
+                      </td>
+                    )}
                   </tr>
                 ))
               )}

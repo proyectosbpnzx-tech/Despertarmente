@@ -4,7 +4,7 @@ import { useActionState, useRef, useEffect, useState } from "react";
 import {
   asignarRutina,
   type AsignarRutinaState,
-} from "@/app/(admin)/admin/socios/[id]/actions";
+} from "@/app/(staff)/panel/socios/[id]/actions";
 import type { Ejercicio } from "@/lib/types";
 
 const initialState: AsignarRutinaState = {};

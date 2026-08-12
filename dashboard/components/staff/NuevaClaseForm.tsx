@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useRef, useEffect } from "react";
-import { createClase, type CreateClaseState } from "@/app/(admin)/admin/clases/actions";
+import { createClase, type CreateClaseState } from "@/app/(staff)/panel/clases/actions";
 import type { Profesor } from "@/lib/types";
 
 const initialState: CreateClaseState = {};

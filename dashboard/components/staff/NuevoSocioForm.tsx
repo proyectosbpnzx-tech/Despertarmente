@@ -1,7 +1,8 @@
 "use client";
 
 import { useActionState, useRef, useEffect } from "react";
-import { createSocio, type CreateSocioState } from "@/app/(admin)/admin/socios/actions";
+import { createSocio, type CreateSocioState } from "@/app/(staff)/panel/socios/actions";
+import { CredencialesNuevas } from "@/components/staff/CredencialesNuevas";
 
 const initialState: CreateSocioState = {};
 
@@ -65,14 +66,11 @@ export function NuevoSocioForm() {
       </form>
 
       {state.success && (
-        <div role="status" className="mt-4 rounded-card border border-success/40 bg-success/10 p-4">
-          <p className="text-sm font-semibold text-text">Socio creado.</p>
-          <p className="mt-1 text-sm text-muted">
-            Compartile estos datos por WhatsApp — la contraseña solo se muestra una vez:
-          </p>
-          <p className="mt-2 font-mono text-sm text-text">{state.success.email}</p>
-          <p className="font-mono text-sm text-text">{state.success.tempPassword}</p>
-        </div>
+        <CredencialesNuevas
+          titulo="Socio creado."
+          email={state.success.email}
+          tempPassword={state.success.tempPassword}
+        />
       )}
     </div>
   );

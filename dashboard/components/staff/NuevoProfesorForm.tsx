@@ -1,7 +1,8 @@
 "use client";
 
 import { useActionState, useRef, useEffect } from "react";
-import { createProfesor, type CreateProfesorState } from "@/app/(admin)/admin/profesores/actions";
+import { createProfesor, type CreateProfesorState } from "@/app/(staff)/panel/profesores/actions";
+import { CredencialesNuevas } from "@/components/staff/CredencialesNuevas";
 
 const initialState: CreateProfesorState = {};
 
@@ -14,6 +15,9 @@ export function NuevoProfesorForm() {
       formRef.current?.reset();
     }
   }, [state.success]);
+
+  // El alta con email devuelve credenciales; sin email es solo la ficha.
+  const credenciales = typeof state.success === "object" ? state.success : null;
 
   return (
     <div className="rounded-card border border-border bg-surface p-6">
@@ -49,6 +53,20 @@ export function NuevoProfesorForm() {
           />
         </label>
 
+        <label className="flex flex-col gap-1.5 text-sm text-muted">
+          Email (opcional)
+          <input
+            name="email"
+            type="email"
+            aria-describedby="email-ayuda"
+            className="rounded-[0.6rem] border border-border bg-bg px-3 py-2.5 text-text outline-none focus-visible:border-accent"
+          />
+          <span id="email-ayuda" className="text-xs text-muted">
+            Si cargás un email, le creamos la cuenta para entrar al panel y cargar el
+            seguimiento de los socios. Sin email queda solo como ficha en la grilla.
+          </span>
+        </label>
+
         {state.error && (
           <p role="alert" className="text-sm text-danger">
             {state.error}
@@ -63,6 +81,20 @@ export function NuevoProfesorForm() {
           {pending ? "Creando…" : "Crear profesor"}
         </button>
       </form>
+
+      {credenciales && (
+        <CredencialesNuevas
+          titulo="Profesor creado con acceso al panel."
+          email={credenciales.email}
+          tempPassword={credenciales.tempPassword}
+        />
+      )}
+
+      {state.success === true && (
+        <p role="status" className="mt-4 text-sm text-success">
+          Profesor creado (sin acceso al panel).
+        </p>
+      )}
     </div>
   );
 }

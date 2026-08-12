@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth";
 import type { DiaSemana } from "@/lib/types";
 
 const DIAS_VALIDOS: DiaSemana[] = [
@@ -23,6 +24,9 @@ export async function createClase(
   _prevState: CreateClaseState,
   formData: FormData
 ): Promise<CreateClaseState> {
+  // El catálogo lo administra solo el admin; el profesor lo ve, no lo edita.
+  await requireAdmin();
+
   const nombre = String(formData.get("nombre") ?? "").trim();
   const profesorId = String(formData.get("profesor_id") ?? "").trim();
   const diaSemana = String(formData.get("dia_semana") ?? "").trim();
@@ -55,12 +59,14 @@ export async function createClase(
     return { error: error.message };
   }
 
-  revalidatePath("/admin/clases");
+  revalidatePath("/panel/clases");
   return { success: true };
 }
 
 export async function toggleClaseActiva(id: string, activa: boolean) {
+  await requireAdmin();
+
   const supabase = await createClient();
   await supabase.from("clases").update({ activa }).eq("id", id);
-  revalidatePath("/admin/clases");
+  revalidatePath("/panel/clases");
 }

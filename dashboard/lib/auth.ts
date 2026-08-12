@@ -89,11 +89,23 @@ export async function requireAdmin(): Promise<SessionProfile> {
   return profile;
 }
 
-/** Panel de socio. Al staff lo manda a su panel. */
+/**
+ * Panel de socio. Al staff lo manda a su panel.
+ *
+ * Rebota por `isStaff()` y no por `role !== "socio"` a propósito: si algún día
+ * aparece un rol que la app no conoce (alguien lo escribe a mano en la base,
+ * saltando la lista blanca del trigger), tiene que caer del lado del socio —
+ * el de menos privilegios — y no quedar rebotando entre los dos paneles.
+ *
+ * Es exactamente el loop que tenía el código de dos roles: cada layout
+ * mandaba al opuesto, así que un rol que no era ninguno de los dos giraba
+ * para siempre. Todo redirect de este archivo apunta a un panel que acepta
+ * al que llega, nunca "al otro".
+ */
 export async function requireSocio(): Promise<SessionProfile> {
   const profile = await requireProfile();
 
-  if (profile.role !== "socio") {
+  if (isStaff(profile.role)) {
     redirect(STAFF_HOME);
   }
 

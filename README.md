@@ -38,24 +38,46 @@ terminaría en `/login`. Al agregar rutas privadas, sumalas ahí explícitamente
 Tres roles, dos destinos. `admin` y `profesor` son staff y comparten `/panel`; `socio` tiene
 `/mi-progreso`. El socio **nunca** escribe su propio progreso: lo carga el staff.
 
+Dentro del staff hay una segunda frontera: el **admin** organiza (cuentas, catálogo de clases,
+a qué clase queda inscripto cada socio) y **supervisa** (corrige o borra una medición mal
+cargada); el **profesor** es quien trabaja el día a día con el socio (asistencia, rutinas, alta
+de mediciones).
+
 | Acción | admin | profesor | socio |
 |---|:--:|:--:|:--:|
 | Ver su propio progreso | — | — | ✅ |
 | Ver socios y sus fichas | ✅ | ✅ | ❌ |
-| Asistencia, rutinas, mediciones | ✅ | ✅ | ❌ |
-| Ver la grilla de clases | ✅ | ✅ | ❌ |
+| Ver la grilla de clases | ✅ | ✅ | ✅ (las propias) |
+| Inscribir / desinscribir un socio de una clase | ✅ | ❌ | ❌ |
+| Registrar asistencia (clase tomada) | ❌ | ✅ | ❌ |
+| Asignar / editar rutinas | ❌ | ✅ | ❌ |
+| Cargar una medición | ❌ | ✅ | ❌ |
+| Editar / eliminar una medición | ✅ | ❌ | ❌ |
 | Crear / desactivar clases | ✅ | ❌ | ❌ |
 | Fichas de profesores | ✅ | ❌ | ❌ |
 | Alta de cuentas y accesos | ✅ | ❌ | ❌ |
 
+### Inscripción ≠ asistencia
+
+Dos tablas, dos momentos distintos:
+
+- **`inscripciones`** — a qué clase pertenece un socio (ej. "martes 18hs con Profe X"). La arma
+  el admin al organizar la agenda. Es fija hasta que alguien la cambia.
+- **`clases_tomadas`** — si ese socio vino o no a una sesión puntual. Lo marca el profesor,
+  clase a clase. No depende de estar inscripto: el profesor puede registrar la asistencia de
+  cualquier socio a cualquier clase activa.
+
 ### Dónde se hace cumplir
 
 1. **RLS en Postgres** (`supabase/migrations/`) — la única capa que importa. Los predicados
-   `is_admin()` e `is_staff()` definen la frontera.
-2. **Guards de la app** (`lib/auth.ts`) — `requireStaff()`, `requireAdmin()`, `requireSocio()`.
-   Evitan que alguien *vea* una pantalla que no le toca. Todo redirect apunta a un panel que
-   acepta al que llega, nunca "al otro": así un rol inesperado no queda rebotando en un loop.
-3. **UI condicional** — los links y formularios de admin no se renderizan para el profesor.
+   `is_admin()`, `is_staff()` e `is_profesor()` definen la frontera; en `mediciones` la policy
+   de escritura está partida por comando (`insert` es del profesor, `update`/`delete` del admin)
+   porque RLS no permite mezclar dos roles distintos en una sola policy `for all`.
+2. **Guards de la app** (`lib/auth.ts`) — `requireStaff()`, `requireAdmin()`, `requireProfesor()`,
+   `requireSocio()`. Evitan que alguien *vea* una pantalla que no le toca. Todo redirect apunta a
+   un panel que acepta al que llega, nunca "al otro": así un rol inesperado no queda rebotando en
+   un loop.
+3. **UI condicional** — los links y formularios de un rol no se renderizan para el otro.
    Es cortesía, no seguridad.
 
 ⚠️ **El cliente service-role (`lib/supabase/admin.ts`) bypassea RLS.** Un Server Action es un
@@ -77,6 +99,7 @@ Correr en orden en el SQL Editor de Supabase:
 |---|---|
 | `0001_init.sql` | Schema inicial, roles `admin`/`socio`, RLS |
 | `0002_rol_profesor.sql` | Rol `profesor`, `is_staff()`, `profesores.profile_id`, reescribe RLS |
+| `0003_permisos_profesor_admin.sql` | `is_profesor()`, tabla `inscripciones`, separa la escritura de `clases_tomadas`/`rutinas`/`mediciones` entre profesor y admin |
 
 El primer admin se promueve a mano (ver el final de `0001_init.sql`).
 

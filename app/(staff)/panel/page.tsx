@@ -2,11 +2,18 @@ import Link from "next/link";
 import { Container } from "@/components/panel/ui/Container";
 import { requireStaff } from "@/lib/auth";
 
-const ACCESOS: { href: string; label: string; detalle: string; adminOnly?: boolean }[] = [
+const ACCESOS: {
+  href: string;
+  label: string;
+  detalle: string;
+  detalleAdmin?: string;
+  adminOnly?: boolean;
+}[] = [
   {
     href: "/panel/socios",
     label: "Socios",
     detalle: "Asistencia, rutinas y mediciones",
+    detalleAdmin: "Fichas, inscripciones y supervisión de mediciones",
   },
   {
     href: "/panel/clases",
@@ -47,7 +54,9 @@ export default async function PanelHomePage() {
               className="rounded-card border border-border bg-surface px-5 py-4 hover:border-accent"
             >
               <span className="font-semibold text-text">{acceso.label} →</span>
-              <span className="mt-1 block text-sm text-muted">{acceso.detalle}</span>
+              <span className="mt-1 block text-sm text-muted">
+                {esAdmin ? (acceso.detalleAdmin ?? acceso.detalle) : acceso.detalle}
+              </span>
             </Link>
           ))}
         </div>

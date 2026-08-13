@@ -93,3 +93,13 @@ export interface Medicion {
   registrado_por: string | null;
   created_at: string;
 }
+
+/** Asignación de un socio a una clase (horario fijo). Distinta de
+ * ClaseTomada, que es el registro de asistencia por sesión. */
+export interface Inscripcion {
+  id: string;
+  socio_id: string;
+  clase_id: string;
+  created_by: string | null;
+  created_at: string;
+}

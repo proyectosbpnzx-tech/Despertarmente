@@ -90,6 +90,20 @@ export async function requireAdmin(): Promise<SessionProfile> {
 }
 
 /**
+ * Solo profesor: asistencia, rutinas, alta de mediciones — el trabajo de
+ * cancha. El admin ve estas fichas pero no las carga (ver README).
+ */
+export async function requireProfesor(): Promise<SessionProfile> {
+  const profile = await requireProfile();
+
+  if (profile.role !== "profesor") {
+    redirect(panelHome(profile.role));
+  }
+
+  return profile;
+}
+
+/**
  * Panel de socio. Al staff lo manda a su panel.
  *
  * Rebota por `isStaff()` y no por `role !== "socio"` a propósito: si algún día

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { requireSocio } from "@/lib/auth";
+import { contarProgreso } from "@/lib/progreso";
 import { MemberNav } from "@/components/panel/member/MemberNav";
 
 // Comparte dominio con el sitio público: nunca indexar.
@@ -13,11 +14,12 @@ export const metadata: Metadata = {
  * El socio nunca escribe su propio progreso: eso lo carga el staff.
  */
 export default async function MemberLayout({ children }: { children: React.ReactNode }) {
-  await requireSocio();
+  const { id } = await requireSocio();
+  const contadores = await contarProgreso(id);
 
   return (
     <>
-      <MemberNav />
+      <MemberNav contadores={contadores} />
       {children}
     </>
   );

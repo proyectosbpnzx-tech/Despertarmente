@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/panel/ui/Container";
+import { Contador } from "@/components/panel/ui/Contador";
 import { RegistrarClaseTomadaForm } from "@/components/panel/staff/RegistrarClaseTomadaForm";
 import { AsignarRutinaForm } from "@/components/panel/staff/AsignarRutinaForm";
 import { RegistrarMedicionForm } from "@/components/panel/staff/RegistrarMedicionForm";
@@ -115,7 +116,10 @@ export default async function SocioDetailPage({
           </div>
         )}
 
-        <h2 className="mt-10 font-display text-lg font-bold text-text">Inscripciones</h2>
+        <h2 className="mt-10 font-display text-lg font-bold text-text">
+          Inscripciones
+          <Contador n={inscripciones?.length ?? 0} />
+        </h2>
         <div className="mt-4 overflow-x-auto rounded-card border border-border">
           <table className="w-full text-left text-sm">
             <thead className="bg-surface text-muted">
@@ -167,7 +171,10 @@ export default async function SocioDetailPage({
           </div>
         )}
 
-        <h2 className="mt-10 font-display text-lg font-bold text-text">Clases tomadas</h2>
+        <h2 className="mt-10 font-display text-lg font-bold text-text">
+          Clases tomadas
+          <Contador n={clasesTomadas?.length ?? 0} />
+        </h2>
         <div className="mt-4 overflow-x-auto rounded-card border border-border">
           <table className="w-full text-left text-sm">
             <thead className="bg-surface text-muted">
@@ -224,7 +231,10 @@ export default async function SocioDetailPage({
           </div>
         )}
 
-        <h2 className="mt-10 font-display text-lg font-bold text-text">Rutinas</h2>
+        <h2 className="mt-10 font-display text-lg font-bold text-text">
+          Rutinas
+          <Contador n={rutinas?.length ?? 0} />
+        </h2>
         <div className="mt-4 flex flex-col gap-4">
           {!rutinas || rutinas.length === 0 ? (
             <p className="rounded-card border border-border bg-surface p-6 text-center text-muted">
@@ -282,7 +292,10 @@ export default async function SocioDetailPage({
           </div>
         )}
 
-        <h2 className="mt-10 font-display text-lg font-bold text-text">Mediciones</h2>
+        <h2 className="mt-10 font-display text-lg font-bold text-text">
+          Mediciones
+          <Contador n={mediciones?.length ?? 0} />
+        </h2>
         <div className="mt-4 overflow-x-auto rounded-card border border-border">
           <table className="w-full text-left text-sm">
             <thead className="bg-surface text-muted">
